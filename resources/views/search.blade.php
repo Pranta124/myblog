@@ -1,0 +1,74 @@
+@extends('layouts.frontend.app')
+@section('content')
+<div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <div id="imaginary_container">
+                        <form action="{{route('search')}}" method="GET"> 
+                            <div class="input-group stylish-input-group">
+                            
+                                <input type="text" class="form-control" placeholder="Addictionwhen gambling" 
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Addictionwhen gambling '"
+                                    required="" name="search" value="{{$search ?? ""}}">
+                                    <span class="input-group-addon">
+                                        <button type="submit">
+                                        <span class="fa fa-search"></span>
+                                        </button>
+                                    </span>   
+                            </div>
+                        </form>
+                    </div>
+                    <p class="mt-20 text-center text-white">{{$posts->count() ?? "0"}} results found for "{{$search}}"</p>
+                   
+                </div>
+            </div>
+        </div>
+</div>
+ <!-- Posts Start -->
+ <div class="container-xxl py-5">
+    
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h4 class="section-title bg-white text-center text-primary px-3">Posts</h4>
+            <h1 class="mb-5">All Post</h1>
+        </div>
+        <div class="row g-4 justify-content-center">
+            @if ($posts->count() > 0)
+            @foreach ($posts as $post)
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item bg-light">
+                    <div class="position-relative overflow-hidden">
+                        <img class="img-fluid" src="{{asset('storage/post/'.$post->image)}}" alt="$post->image">
+                                
+                    </div>
+                    <div class="date mt-20 mb-20">{{$post->created_at->diffForHumans()}}</div>
+                        <div class="text-center p-4 pb-0">
+                            <a href="{{route('post',$post->slug)}}"> <h5 class="mb-0">{{$post->tittle}}</h5></a>
+                            <p>{!! Str::limit($post->body, 400) !!}</p>
+                        </div>
+                        <div class="d-flex border-top">
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-heart" aria-hidden="true"></i><a href="#">{{$post->likedUsers->count()}} Likes</a></small>
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-comment" aria-hidden="true"></i><a href="#">{{$post->comments->count()}} Comments</a></small>
+                                
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                @else
+                <h1 class="text-center wow fadeInUp">No posts available</h1>
+                @endif
+                <div class="justify-content-center d-flex mt-5">
+                       {{$posts->appends(Request::all())->links()}}  
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    @include('layouts.frontend.partials.sidebar');
+        
+       
+</div>
+    <!-- Courses End -->
+   
+@endsection
